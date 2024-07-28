@@ -1,8 +1,10 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
+  InternalServerErrorException,
   NotFoundException,
   Param,
   Patch,
@@ -17,21 +19,36 @@ export class ProductsController {
 
   @Post()
   async create(@Body() createProductDto: Prisma.ProductCreateInput) {
-    return await this.productsService.create(createProductDto);
+    try {
+      return await this.productsService.create(createProductDto);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   @Get()
   async findAll() {
-    return await this.productsService.findAll();
+    try {
+      return await this.productsService.findAll();
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const product = await this.productsService.findOne(id);
-    if (!product) {
-      return new NotFoundException("Product doesn't exist");
+    try {
+      const product = await this.productsService.findOne(id);
+      if (!product) {
+        throw new NotFoundException("Product doesn't exist");
+      }
+      return product;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(error.message);
     }
-    return product;
   }
 
   @Patch(':id')
@@ -39,11 +56,19 @@ export class ProductsController {
     @Param('id') id: string,
     @Body() updateProductDto: Prisma.ProductUpdateInput,
   ) {
-    return await this.productsService.update(id, updateProductDto);
+    try {
+      return await this.productsService.update(id, updateProductDto);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    return await this.productsService.remove(id);
+    try {
+      return await this.productsService.remove(id);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 }
