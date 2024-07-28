@@ -21,6 +21,8 @@ model User {
     name String?
 
     OTP                   String?
+    OTPExpiry             DateTime?
+    password              String?
     emailUnsubscribeToken String? @unique @default(cuid())
     referralCode          String? @unique
 
