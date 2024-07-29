@@ -26,6 +26,15 @@ export class ProductsController {
     }
   }
 
+  @Post('bulk')
+  async bulkCreate(@Body() createProductsDto: Prisma.ProductCreateManyInput[]) {
+    try {
+      return await this.productsService.bulkCreate(createProductsDto);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
   @Get()
   async findAll() {
     try {

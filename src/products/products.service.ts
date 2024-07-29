@@ -9,6 +9,12 @@ export class ProductsService {
     return this.databaseService.product.create({ data: createProductDto });
   }
 
+  async bulkCreate(createProductsDto: Prisma.ProductCreateManyInput[]) {
+    return await this.databaseService.product.createMany({
+      data: createProductsDto,
+    });
+  }
+
   findAll() {
     return this.databaseService.product.findMany();
   }

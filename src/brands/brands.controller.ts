@@ -15,6 +15,15 @@ export class BrandsController {
     }
   }
 
+  @Post('bulk')
+  async bulkCreate(@Body() createBrandsDto: Prisma.BrandCreateManyInput[]) {
+    try {
+      return await this.brandsService.bulkCreate(createBrandsDto);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
   @Get()
   async findAll() {
     try {

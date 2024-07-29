@@ -10,6 +10,12 @@ export class BrandsService {
     return this.databaseService.brand.create({ data: createBrandDto });
   }
 
+  bulkCreate(createBrandsDto: Prisma.BrandCreateManyInput[]) {
+    return this.databaseService.brand.createMany({
+      data: createBrandsDto,
+    });
+  }
+
   findAll() {
     return this.databaseService.brand.findMany();
   }
