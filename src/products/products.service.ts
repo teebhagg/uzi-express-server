@@ -16,7 +16,13 @@ export class ProductsService {
   }
 
   findAll() {
-    return this.databaseService.product.findMany();
+    return this.databaseService.product.findMany({
+      include: {
+        brand: true,
+        categories: true,
+        subCategory: true,
+      }
+    });
   }
 
   findOne(id: string) {
